@@ -1,8 +1,8 @@
 # emse.user.js
-Script utilisateur étudiant pour l'école EMSE.
+Userscript pour les étudiants de l'École des Mines de Saint-Étienne.
 Ce script réalise l'auto-validation des formulaires de connexion, passe les pages inutiles et réalise quelques redirections automatiques lorsque la page atteinte est inutile.
 
-Ce fichier existe aussi en version anglaise [ici](https://github.com/mathieucaroff/emse.user.js/blob/master/README.md).
+Ce fichier README existe aussi en version anglaise [ici](https://github.com/mathieucaroff/emse.user.js/blob/master/README.md).
 La version française n'est pas nécessairement bien maintenue à jour.
 
 # Installation
@@ -21,7 +21,8 @@ Sur un certain nombre de pages, ce script propose la validation automatique des 
 
 Les fonctionnaliés sont aussi rapidement décrites dans le script. Chaque fonctionnalité peut être désactivée séparément. Voir la partie configuration.
  * fw-cgcp.emse.fr: Fait la validation automatique des formulaires de connexion. Tant que la page reste ouverte, vous reconnecte toute les 30 minutes (configurable) ou immédiatement si le temps restant est inférieur à 14 minutes (configurable aussi).
- * Promethee: Vous amène automatiquement à la page 'Agenda'. Réalise aussi quelque redirection depuis certaines page d'erreur.
+ * Promethee: Colore l'agenda par matière. Se base sur les lettres du nom de la matière pour calculer arbitrairement une couleur.
+ * Promethee: Vous conduit automatiquement à la page 'Agenda'. Réalise aussi quelques redirections depuis certaines page d'erreur.
  * Campus: Lorsque vous souhaitez vous connecter, vous êtes automatiquement redirigé depuis la page de connexion de campus vers le CAS. Plus de risque d'essayer d'utiliser ce formulaire déroutant sur la gauche de la page.
  * Cas: Connexion (Validation automatique des formulaires de connexion).
  * School's wifi login pages (securelogin.arubanetworks.com): Connexion.
@@ -41,13 +42,17 @@ Par défaut, le script ne fait que auto-valider / passer les pages inutiles / re
     
 Vous pouvez désactiver n'importe quelle fonctionnalité du script via l'attribut `enable` que comporte chaque fonctionnalité :
 
-    "fw-cgcp.emse.fr:login": {
-    		title: "Auto login on fw-cgcp.emse.fr",
-    		description: "Automatically enters credentials on fw-cgcp.emse.fr. Auto send the completed form.",
-    		enabled: true,
-    		regex: "^https://fw-cgcp.emse.fr/auth/($|(auth|login).html)"
-	    },
+    "fw-cgcp.emse.fr:auth": {
+      title: "Auto login on fw-cgcp.emse.fr",
+      description: "Automatically enters credentials on fw-cgcp.emse.fr. Auto send the completed form.",
+      enabled: true,
+      tested: FILL_SUBMIT * MOZILLA + BROWSERFILL_SUBMIT * MOZILLA,
+      regex: "^https://fw-cgcp.emse.fr/auth/auth.html",
+      action: action.fillAndSubmitForm,
+      usernameInputId: "n_uid",
+      passwordInputId: "pswd"
+    },
 
-# Signalement de bugs et erreurs, suggestions & demande de nouvelles fonctionnalités
+# Signalement de bugs et erreurs, suggestions & demandes de nouvelles fonctionnalités
 Faites les directement sur la page "issue" de ce repository github.
 
