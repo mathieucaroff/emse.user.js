@@ -22,13 +22,14 @@ This script offers auto-submitting for a few logging pages. Auto-submitting cons
 The features are quickly described in the script as well. Each feature can be disabled separately. See configuration.
 
  * fw-cgcp.emse.fr: Performs auto login, and as long as the page is open, relogs you every 30 minutes (configurable), or immediately if the remaining time is less than 14 minutes (configurable too).
+ * Promethee: Brings colors to the agenda! Arbitrarily compute one color per subject, based on the letters of the subject's name.
  * Promethee: Automatically takes you to the "Agenda" page. Redirects you from some error pages as well.
  * Campus: When you want to login, you are automatically redirected to the CAS page: No more risk of trying using that confusing form on the left.
  * Cas: Auto submitting.
  * School's wifi login pages (securelogin.arubanetworks.com): Auto submitting.
  * Campus CGCP (cloud-sgc.emse.fr:5001): Auto submitting.
  * Sogo: Auto submitting.
- * Sogo3: Auto submitting / WORKS ONLY WHEN THE LOGIN FORM IS FILLED BY YOUR WEB BROWSER / DOES NOT WORK WHEN FILLED BY THE SCRIPT (AngularJS unhackable interface which considers that the user must input some text before allowing form validation, any halp is welcomed).
+ * Sogo3: Auto submitting / WORKS ONLY WHEN THE LOGIN FORM IS FILLED BY YOUR WEB BROWSER / DOES NOT WORK WHEN FILLED BY THE SCRIPT (AngularJS unhackable interface which considers that the user must input some text before allowing form validation, any help is welcome).
  
 You are otherwise encouraged to edit the code to fit your needs.
 
@@ -42,13 +43,17 @@ By default, the script only performs auto-submit / skipping useless pages / redi
     
 You can also disable any functionality of the script through the `enable` attribute each feature carries:
 
-    "fw-cgcp.emse.fr:login": {
-    		title: "Auto login on fw-cgcp.emse.fr",
-    		description: "Automatically enters credentials on fw-cgcp.emse.fr. Auto send the completed form.",
-    		enabled: true,
-    		regex: "^https://fw-cgcp.emse.fr/auth/($|(auth|login).html)"
-	    },
+    "fw-cgcp.emse.fr:auth": {
+      title: "Auto login on fw-cgcp.emse.fr",
+      description: "Automatically enters credentials on fw-cgcp.emse.fr. Auto send the completed form.",
+      enabled: true,
+      tested: FILL_SUBMIT * MOZILLA + BROWSERFILL_SUBMIT * MOZILLA,
+      regex: "^https://fw-cgcp.emse.fr/auth/auth.html",
+      action: action.fillAndSubmitForm,
+      usernameInputId: "n_uid",
+      passwordInputId: "pswd"
+    },
 
-# Bug and error reporting, suggestions & feature request
+# Bug and error reporting, suggestions & feature requests
 Do them directly on the github repository's issue page.
 
