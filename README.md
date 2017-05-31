@@ -25,27 +25,29 @@ The features are quickly described in the script as well. **Each feature can be 
 
 Feature list:
  * Promethee:
- * Brings colors to the agenda: Arbitrarily compute one color per subject, based on the letters of the subject's name. Set that color as background of the subject. Also works in month and array display mode since v1.03.
-  * Removes Saturdays and Sundays from the month display mode to free space on the page.
-  * Promethee: Automatically takes you to the "Agenda" page. Redirects you from some error pages as well.
+   * Brings colors to the agenda: Arbitrarily compute one color per subject, based on the letters of the subject's name. Set that color as background of the subject. Also works in month and array display mode since v1.03.
+   * Removes Saturdays and Sundays from the month display mode to free space on the page.
+   * Adds an "Expand" button in the agenda. This button expands the agenda frame to make it occupy the whole page.
+   * Automatically takes you to the "Agenda" page when the site loads.
+   * Redirects you from some error pages to the CAS login page.
 
  * fw-cgcp.emse.fr:
-  * (1) Automatically complete and send the login form. [Does not work with Chrome if you did not input your password in the script.]
-  * (2) [Provided (1) is used, and the userinfo page stays open] Relogs you every 30 minutes (configurable), or immediately if the remaining time is less than 14 minutes (configurable too).
+   1. Automatically complete and send the login form. This includes ticking the checkbox for the chart every 24h. [Does not work if you both did not input your password in the script and use Chrome.]
+   2. [Provided (1) is used, and the userinfo page is left opened] Relogs you every 30 minutes (configurable), or immediately if the remaining time is less than 14 minutes (configurable too).
    
  * Campus:
-  * Folds the ICM category when page loads.
-  * Automatically takes the login procedure:
-   * (1) You are sent to the login page when arriving on campus.
-   * (2) [Useless if you use (1)] The `login` considers you are from EMSE and sends you directly to the emse CAS login page, rather than the campus login page.
-   * (3) [Useless if you use (2) or (1)] The campus login page redirects you to the emse CAS login page.
+   * Folds the ICM category when page loads.
+   * Automatically takes the login procedure:
+     1. You are sent to the login page when arriving on campus.
+     2. [Useless if you use (1)] The `login` considers you are from EMSE and sends you directly to the emse CAS login page, rather than the campus login page.
+     3. [Useless if you use (2) or (1)] The campus login page redirects you to the emse CAS login page.
  
-* The script also performs automatic completion and submitting for the following locations [Does not work with Chrome if you did not input your password in the script.]:
- * Cas
- * School's wifi login pages (securelogin.arubanetworks.com)
- * Campus CGCP (cloud-sgc.emse.fr:5001)
- * Sogo
- * Sogo3 [Works only when the login form is filled by your web browser / does not work when filled by the script. This is due to AngularJS unhackable interface which considers that the user must input some text before allowing form validation. Any help is welcome.]
+* The script also performs automatic completion and submitting for the following locations [Does not work if you both did not input your password in the script and use Chrome.]:
+  * Cas
+  * School's wifi login pages (securelogin.arubanetworks.com)
+  * Campus CGCP (cloud-sgc.emse.fr:5001)
+  * Sogo
+  * Sogo3 [Works only when the login form is filled by your web browser / does not work when filled by the script. This is due to AngularJS unhackable interface which considers that the user must input some text before allowing form validation. Any help is welcome.]
  
 You are otherwise encouraged to edit the code to fit your needs.
 
