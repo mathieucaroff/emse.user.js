@@ -16,25 +16,41 @@ Depending on the userscript extension you use, you may be offered to import it f
 
 Avoid clicking the `Raw` button, otherwise the script will be installed with the update URL set. This means that updates will be automatically installed. This is not desirable if you want to set your username and password in the script or do any configuration: The modifications would be overwritten at each update. But if you don't want to do any configuration, then no problem in using the button.
 
+Note: The script can be toggled on and off from the user script manager icon.
+
 # Features
 This script offers auto-submitting for a few logging pages. Auto-submitting consists in having the script automatically validating the login form if it is filled (filled by the browser or by the script, both work).
 
-The features are quickly described in the script as well. Each feature can be disabled separately. See configuration.
+The features are quickly described in the script as well. **Each feature can be disabled separately**. See configuration.
 
- * fw-cgcp.emse.fr: Performs auto login, and as long as the page is open, relogs you every 30 minutes (configurable), or immediately if the remaining time is less than 14 minutes (configurable too).
- * Promethee: Brings colors to the agenda! Arbitrarily compute one color per subject, based on the letters of the subject's name.
- * Promethee: Automatically takes you to the "Agenda" page. Redirects you from some error pages as well.
- * Campus: When you want to login, you are automatically redirected to the CAS page: No more risk of trying using that confusing form on the left.
- * Cas: Auto submitting.
- * School's wifi login pages (securelogin.arubanetworks.com): Auto submitting.
- * Campus CGCP (cloud-sgc.emse.fr:5001): Auto submitting.
- * Sogo: Auto submitting.
- * Sogo3: Auto submitting / WORKS ONLY WHEN THE LOGIN FORM IS FILLED BY YOUR WEB BROWSER / DOES NOT WORK WHEN FILLED BY THE SCRIPT (AngularJS unhackable interface which considers that the user must input some text before allowing form validation, any help is welcome).
+Feature list:
+ * Promethee:
+ * Brings colors to the agenda: Arbitrarily compute one color per subject, based on the letters of the subject's name. Set that color as background of the subject. Also works in month and array display mode since v1.03.
+  * Removes Saturdays and Sundays from the month display mode to free space on the page.
+  * Promethee: Automatically takes you to the "Agenda" page. Redirects you from some error pages as well.
+
+ * fw-cgcp.emse.fr:
+  * (1) Automatically complete and send the login form. [Does not work with Chrome if you did not input your password in the script.]
+  * (2) [Provided (1) is used, and the userinfo page stays open] Relogs you every 30 minutes (configurable), or immediately if the remaining time is less than 14 minutes (configurable too).
+   
+ * Campus:
+  * Folds the ICM category when page loads.
+  * Automatically takes the login procedure:
+   * (1) You are sent to the login page when arriving on campus.
+   * (2) [Useless if you use (1)] The `login` considers you are from EMSE and sends you directly to the emse CAS login page, rather than the campus login page.
+   * (3) [Useless if you use (2) or (1)] The campus login page redirects you to the emse CAS login page.
+ 
+* The script also performs automatic completion and submitting for the following locations [Does not work with Chrome if you did not input your password in the script.]:
+ * Cas
+ * School's wifi login pages (securelogin.arubanetworks.com)
+ * Campus CGCP (cloud-sgc.emse.fr:5001)
+ * Sogo
+ * Sogo3 [Works only when the login form is filled by your web browser / does not work when filled by the script. This is due to AngularJS unhackable interface which considers that the user must input some text before allowing form validation. Any help is welcome.]
  
 You are otherwise encouraged to edit the code to fit your needs.
 
 # Configuration
-By default, the script only performs auto-submit / skipping useless pages / redirections. If you do not have the login form auto-completed by your web browser, you can enable this script to do so. You will have to set your username and/or your password as well as the options `global.fillusername` and `global.fillpassword` at the beginning of the code:
+By default, the script only performs automatic login form submitting / skipping useless pages / redirections. If you do not have the login form auto-completed by your web browser, you can enable this script to do so. You will have to set your username and/or your password as well as the options `global.fillusername` and `global.fillpassword` at the beginning of the code:
 
     global.fillusername = true;
     global.username = "YOUR.LOGIN";
@@ -55,5 +71,5 @@ You can also disable any functionality of the script through the `enable` attrib
     },
 
 # Bug and error reporting, suggestions & feature requests
-Do them directly on the github repository's issue page.
+Do them directly on the Github repository's issue page.
 
