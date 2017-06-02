@@ -516,7 +516,7 @@ function laterSpecifiedActions (features) {
       }
     }
     setTimeout(loadNextPage, 1000 * relogTime);
-    if (box.textContent.indexOf("Welcome") != -1) {
+    if (box.textContent.match("Welcome|Bienvenue")) {
       box.insertAdjacentHTML('beforeend', `
   <br/>You will be relogged whenever the elapsed time exceeds ${formatTime(me.elapsedTimeThreshold)}, or the remaining time goes below ${formatTime(me.remainingTimeThreshold)}.
   <br/>This will happend in ${formatTime(relogTime)}.`);
