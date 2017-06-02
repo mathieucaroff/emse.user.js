@@ -33,13 +33,13 @@ Feature list:
 
  * fw-cgcp.emse.fr:
    1. Automatically complete and send the login form. This includes ticking the checkbox for the chart every 24h. [Does not work if you both did not input your password in the script and use Chrome.]
-   2. [Provided (i) is used, and the userinfo page is left opened] Relogs you every 30 minutes (configurable), or immediately if the remaining time is less than 14 minutes (configurable too).
+   2. [Provided (i) is used and the userinfo page is left opened] Relogs you every 30 minutes (configurable), or immediately if the remaining time is less than 14 minutes (configurable too).
    
  * Campus:
    * Folds the ICM category when page loads.
    * Automatically takes the login procedure:
      1. You are sent to the login page when arriving on campus.
-     2. [Useless if you use (a)] The `login` considers you are from EMSE and sends you directly to the emse CAS login page, rather than the campus login page.
+     2. [Useless if you use (a)] The `login` button considers you are from EMSE and sends you directly to the emse CAS login page, rather than the campus login page.
      3. [Useless if you use (b) or (a)] The campus login page redirects you to the emse CAS login page.
  
 * The script also performs automatic completion and submitting for the following locations [Does not work if you both did not input your password in the script and use Chrome.]:
@@ -52,12 +52,12 @@ Feature list:
 You are otherwise encouraged to edit the code to fit your needs.
 
 # Configuration
-By default, the script only performs automatic login form submitting / skipping useless pages / redirections. If you do not have the login form auto-completed by your web browser, you can enable this script to do so. You will have to set your username and/or your password as well as the options `global.fillusername` and `global.fillpassword` at the beginning of the code:
+By default, the script only performs automatic login form submitting / skipping useless pages / redirections. If you do not have the login form auto-completed by your web browser, you can enable this script to do so. You will have to set your username and/or your password at the beginning of the code:
 
-    global.fillusername = true;
     global.username = "YOUR.LOGIN";
-    global.fillpassword = true;
+    global.fillUsernameEnabled = true;
     global.password = "YOUR.PASSWORD";
+    global.fillPasswordEnabled = true;
     
 You can also disable any functionality of the script through the `enable` attribute each feature carries:
 
