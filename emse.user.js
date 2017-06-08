@@ -551,8 +551,7 @@ function laterSpecifiedActions (features) {
     let tdQuery = "table/tbody/tr[2]/td/table/tbody/tr[position()>1]/td[position()>1][@class='GEDcellsouscategorie'][@bgcolor]";
     for (let td of XPathQuery(tdQuery, divVis)) {
       let queryResult = XPathQuery("table/tbody/tr/td/b[following-sibling::br]", td);
-      if (queryResult.length > 0) {
-        let bElement = queryResult[0];
+      for (let bElement of queryResult) {
         setElementsColorToRainbow([td, bElement.parentElement], bElement.textContent);
       }
     }
@@ -560,13 +559,13 @@ function laterSpecifiedActions (features) {
     let tableQuery = "table/tbody/tr[2]/td/table/tbody/tr[position()>1]/td[position()>1]/table[position()>1]";
     for (let table of XPathQuery(tableQuery, divVis)) {
       let queryResult = XPathQuery("tbody/tr/td/text()[following-sibling::br]", table);
-      if (queryResult.length > 0) {
-        let subjectName = queryResult[0].textContent;
+      for (let textNode of queryResult) {
+        let subjectName = textNode.textContent;
         setElementsColorToRainbow([table], subjectName);
       }
     }
     /* Array page display mode */
-    for (let div of document.querySelectorAll("div#DivNom")) { // Yes, this page has several elements with the same id.
+    for (let div of document.querySelectorAll("div#DivNom")) { // Yes, this page has several elements with the same id... and this work.
       setElementsColorToRainbow([div.parentElement.parentElement, div], div.textContent);
     }
   }
