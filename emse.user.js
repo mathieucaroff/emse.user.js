@@ -183,7 +183,7 @@ var features_ = _ => ({
     title: "Auto login on cas.emse.fr",
     description: "Automatically enters credentials on cas.emse.fr. Auto send the completed form.",
     enabled: true,
-    tested: ( FILL_SUBMIT + BROWSERFILL_SUBMIT + FILL_NOSUBMIT ) * MOZILLA + FILL_SUBMIT * CHROME,
+    tested: ( FILL_SUBMIT + BROWSERFILL_SUBMIT + FILL_NOSUBMIT + NOFILL_NOSUBMIT) * MOZILLA + FILL_SUBMIT * CHROME,
     regex: "^https%?://cas.emse.fr/login",
     action: action.fillAndSubmitForm,
     usernameInputId: "username",
@@ -208,7 +208,7 @@ var features_ = _ => ({
     title: "Auto login on CAMPUS GCP server",
     description: "Automatically enters credentials on CAMPUS GCP server. Auto send the completed form.",
     enabled: true,
-    tested: FILL_SUBMIT * MOZILLA + FILL_SUBMIT * CHROME + BROWSERFILL_SUBMIT * MOZILLA,
+    tested: FILL_SUBMIT * MOZILLA + FILL_SUBMIT * CHROME + BROWSERFILL_SUBMIT * MOZILLA + NOFILL_NOSUBMIT * MOZILLA,
     regex: "^https://(cloud-sgc.emse.fr|172.16.160.10):5001",
     action: action.fillAndSpecialSubmitForm,
     usernameInputId: "login_username",
@@ -221,7 +221,7 @@ var features_ = _ => ({
     title: "Auto login on sogo.emse.fr",
     description: "Automatically enters credentials on sogo.emse.fr. Auto send the completed form.",
     enabled: true,
-    tested: FILL_SUBMIT * MOZILLA + FILL_SUBMIT * CHROME, // Couldn't test BROSERFILL_SUBMIT, your help is welcomed =)
+    tested: FILL_SUBMIT * MOZILLA + FILL_SUBMIT * CHROME + NOFILL_NOSUBMIT * MOZILLA, // Couldn't test BROSERFILL_SUBMIT, your help is welcomed =)
     regex: "^https://sogo.emse.fr/(SOGo|login)",
     action: action.fillAndSpecialSubmitForm,
     usernameInputId: "userName",
@@ -232,7 +232,7 @@ var features_ = _ => ({
     title: "Auto login on sogo3.emse.fr",
     description: "Automatically enters credentials on sogo3.emse.fr. Auto send the completed form.",
     enabled: true,
-    tested: BROWSERFILL_SUBMIT * MOZILLA + FAILED(FILL_SUBMIT * MOZILLA) + FAILED(FILL_SUBMIT * CHROME),
+    tested: BROWSERFILL_SUBMIT * MOZILLA + NOFILL_NOSUBMIT * MOZILLA + FAILED(FILL_SUBMIT * MOZILLA) + FAILED(FILL_SUBMIT * CHROME),
     regex: "^https://sogo3.emse.fr/(SOGo|login)",
     action: action.fillAndSpecialSubmitForm,
     usernameInputId: "input_1",
@@ -422,6 +422,32 @@ formtools.readInputById = function (id) {
   let input = document.getElementById(id);
   return input ? input.value : null;
 };
+formtools.testInputSubmitabilityById = function (id) {
+  if (id === null) {
+    return true;
+  }
+  if (!id) {
+    return false;
+  }
+  if (id) {
+    let input = document.getElementById(id);
+    if (input) {
+      if (input.getAttribute("noautosubmit")) {
+        return false;
+      } else {
+        if (input.value) {
+          return true;
+        } else {
+          input.setAttribute("noautosubmit", "true");
+          return false;
+        }
+      }
+    }
+    if (!input) {
+      return true;
+    }
+  }
+};
 formtools.fillInputById = function (id, value) {
   let input = document.getElementById(id);
   if (input) {
@@ -443,13 +469,11 @@ formtools.submit = function (me) {
   let uiid = me.usernameInputId;
   let piid = me.passwordInputId;
   if (global.autosubmit) {
-    if ( ((uiid === null) || formtools.readInputById(uiid))
-      && ((piid === null) || formtools.readInputById(piid) || formtools.testFilledByWebkit(piid)) ) {
-      submitlog("Auto submitting in formtools.submit", uiid, piid);
+    if ([uiid, piid].every(formtools.testInputSubmitabilityById)) {
       for (let inputid of [uiid, piid]) {
         let input = document.getElementById(inputid);
-        submitlog("Found input,", input, "in formtools.submit");
         if (input) {
+          submitlog("Found input,", input, "#"+inputid, "in formtools.submit");
           input.form.submit();
         }
       }
@@ -464,20 +488,6 @@ formtools.elementClicker = function (selector) {
     }
   };
 };
-
-formtools.testFilledByWebkit = function (id) {
-  let input = document.getElementById(id);
-  let filled = false;
-  if (input){
-    let colorText = window.getComputedStyle(input)["background-color"];
-    if  (colorText.indexOf("rgb(250, 255, 189)") != -1
-      || colorText.indexOf("#faffbd")            != -1) {
-      filled = true;
-    }
-  }
-  return filled;
-};
-
 
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
@@ -550,7 +560,7 @@ function laterSpecifiedActions (features) {
     /* Week page display mode */
     let tdQuery = "table/tbody/tr[2]/td/table/tbody/tr[position()>1]/td[position()>1][@class='GEDcellsouscategorie'][@bgcolor]";
     for (let td of XPathQuery(tdQuery, divVis)) {
-      let queryResult = XPathQuery("table/tbody/tr/td/b[following-sibling::br]", td);
+      let queryResult = XPathQuery("table/tbody/tr/td/b", td);
       for (let bElement of queryResult) {
         setElementsColorToRainbow([td, bElement.parentElement], bElement.textContent);
       }
@@ -558,7 +568,7 @@ function laterSpecifiedActions (features) {
     /* Month page display mode */
     let tableQuery = "table/tbody/tr[2]/td/table/tbody/tr[position()>1]/td[position()>1]/table[position()>1]";
     for (let table of XPathQuery(tableQuery, divVis)) {
-      let queryResult = XPathQuery("tbody/tr/td/text()[following-sibling::br]", table);
+      let queryResult = XPathQuery("tbody/tr/td/text()", table);
       for (let textNode of queryResult) {
         let subjectName = textNode.textContent;
         setElementsColorToRainbow([table], subjectName);
