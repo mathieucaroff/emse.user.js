@@ -6,12 +6,14 @@ This file has a French version [here](https://github.com/mathieucaroff/emse.user
 
 # How to install
 ### Step 1: install a user script manager
-Chrome / Opera / Safari / Vivaldi: [Tampermonkey extension](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo)
+Chrome / Opera / Safari / Chromium / Vivaldi: [Tampermonkey extension](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo)
+- Click the top right blue button to install the extension.
 Firefox: [Greasmonkey extension](https://addons.mozilla.org/firefox/addon/greasemonkey/)
-The page [Greasyfork](https://greasyfork.org/en) provides a more comprehensive list.
+- On the page linked above, press the green button to install Greasmonkey. A restart of the Firefox will be required. If you click on the `restart` button, all your tabs will be reopened by Firefox.
+For a more comprehensive list of web browser, see this page: [Greasyfork](https://greasyfork.org/en).
 
 ### Step 2: install the script
-Copy the script from the file `emse.user.js` of the current repository [(link: emse.user.js)](https://github.com/mathieucaroff/emse.user.js/blob/master/emse.user.js). Create a new script with your userscript manager extension and paste the copied script in it.
+Copy the script from the file `emse.user.js` of the current repository [(link: emse.user.js)](https://github.com/mathieucaroff/emse.user.js/blob/master/emse.user.js). Create a new script with your userscript manager extension and paste the copied script in it. This is done by clicking on the extention icon (top right of your browser window, right of the address bar), then selecting either of `Create a new script` or `New User Script...`.
 Depending on the userscript extension you use, you may be offered to import it from the clipboard.
 
 Avoid clicking the `Raw` button, otherwise the script will be installed with the update URL set. This means that updates will be automatically installed. This is not desirable if you want to set your username and password in the script or do any configuration: The modifications would be overwritten at each update. But if you don't want to do any configuration, then no problem in using the button.
@@ -34,14 +36,14 @@ Feature list:
  * fw-cgcp.emse.fr:
    1. Automatically complete and send the login form. This includes ticking the checkbox for the chart every 24h. [Does not work if you both did not input your password in the script and use Chrome.]
    2. [Provided (i) is used and the userinfo page is left opened] Relogs you every 30 minutes (configurable), or immediately if the remaining time is less than 14 minutes (configurable too).
-   
+
  * Campus:
    * Folds the ICM category when page loads.
    * Automatically takes the login procedure:
      1. You are sent to the login page when arriving on campus.
      2. [Useless if you use (a)] The `login` button considers you are from EMSE and sends you directly to the emse CAS login page, rather than the campus login page.
      3. [Useless if you use (b) or (a)] The campus login page redirects you to the emse CAS login page.
- 
+
 * The script also performs automatic completion and submitting for the following locations [Does not work if you both did not input your password in the script and use Chrome.]:
   * Cas
   * School's wifi login pages (securelogin.arubanetworks.com)
