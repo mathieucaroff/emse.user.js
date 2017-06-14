@@ -8,8 +8,10 @@ This file has a French version [here](https://github.com/mathieucaroff/emse.user
 ### Step 1: install a user script manager
 Chrome / Opera / Safari / Chromium / Vivaldi: [Tampermonkey extension](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo)
 - Click the top right blue button to install the extension.
+
 Firefox: [Greasmonkey extension](https://addons.mozilla.org/firefox/addon/greasemonkey/)
 - On the page linked above, press the green button to install Greasmonkey. A restart of the Firefox will be required. If you click on the `restart` button, all your tabs will be reopened by Firefox.
+
 For a more comprehensive list of web browser, see this page: [Greasyfork](https://greasyfork.org/en).
 
 ### Step 2: install the script
