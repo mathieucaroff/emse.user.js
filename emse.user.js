@@ -15,6 +15,8 @@
 //    Configuration     //
 //////////////////////////
 
+var debug = false;
+
 var global = {};
 
 global.username = "YOUR.LOGIN";
@@ -262,7 +264,6 @@ var IN_DEVELOPMENT = -1;
 
 function nothing (...args) {}
 
-var debug = true;
 var specifiedLater = "specifiedLater";
 var log = debug ? console.log : nothing;
 var regexlog = nothing;
