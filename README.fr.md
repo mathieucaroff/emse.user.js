@@ -29,7 +29,7 @@ Les fonctionnalités sont aussi rapidement décrites dans le script. **Chaque fo
 Liste des fonctionnalités :
 * Promethee:
   * Colore l'agenda par matière. Se base sur les lettres du nom de la matière pour calculer arbitrairement une couleur. Fonctionne aussi en affichage tableau et par mois depuis la version 1.03.
-  * Ajoute un bouton pour zoomer sur l'agenda, et cacher tout les éléments de menus, ainsi que sont contrepartie pour dézoomer.
+  * Ajoute un bouton pour agrandir l'agenda, et cacher les éléments de menu, et un bouton pour revenir à l'affichage normal.
   * Cache les colonnes des samedi et dimanche en affichage par mois (v1.03+).
   * Vous conduit automatiquement à la page 'Agenda'. Réalise aussi quelques redirections depuis certaines page d'erreur.
 * fw-cgcp.emse.fr:
