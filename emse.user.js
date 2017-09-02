@@ -4,8 +4,9 @@
 // @include     /^https?://[a-zA-Z0-9_-]+[.]emse[.]fr/
 // @include     /^https?://172[.]16[.]160[.]10:5001/
 // @include     /^https?://securelogin[.]arubanetworks[.]com/
+// @include     /^https?://www[.]msn[.]com/fr-fr/.*[?](.*&?ocid=wispr|.*&?pc=u477){2}/
 // @author      Mathieu CAROFF
-// @version     1.03
+// @version     1.04
 // @grant       none
 // @run-at      document-end
 // ==/UserScript==
@@ -19,70 +20,117 @@ var debug = false;
 
 var global = {};
 
+// Username is optional
 global.username = "YOUR.LOGIN";
 global.fillUsernameEnabled = true;
-// global.fillUsernameEnabled overwritten to false if login set to "" or to "YOUR.LOGIN"
+// global.fillUsernameEnabled overwritten to false if `username` is set to "" or to "YOUR.LOGIN"
 
+// Password is optional.
+// Filling Password is rather useless if Username isn't filled too.
 global.password = "YOUR.PASSWORD";
 global.fillPasswordEnabled = true;
-// global.fillPasswordEnabled overwritten to false if password set to "" or to "YOUR.PASSWORD"
+// global.fillPasswordEnabled overwritten to false if `password` is set to "" or to "YOUR.PASSWORD"
 
+// Should the forms be autosubmitted if they are ready to be ?
 global.autosubmit = true;
 
+// Should colors of each time of the timetable be changed on Promethee?
 global.prometheeColorsEnabled = true;
+// Should weekends be removed when in month mode, to gain room on the page ?
 global.prometheeMonthRemoveWeekEnd = true;
 
+// Should you be logged automatically on campus.emse.fr ?
 global.campusAutologin = true;
 
-
+ 
+// Overwriting the two below values, so as to be able to ship the script with
+// `global.fillUsernameEnabled = true;` and
+// `global.fillPasswordEnabled = true;` by default.
 global.fillUsernameEnabled &= !(global.userename == "" || global.username === "YOUR.LOGIN");
 global.fillPasswordEnabled &= !(global.password == "" || global.password === "YOUR.PASSWORD");
 
-// You can disable / enable each feature separately
+// You can disable / enable each feature separately.
+// URegex != Regexp. See note below `features_`.
+// To understand missing variables in features_`, see `function main ()`
 var features_ = _ => ({
   // | Promethee |
   "promethee.emse.fr:rainbow": {
     title: "Add color to the agenda subjects",
     description: "Hash the name of each subject of the agenda into a color. Set that color as background of the subject block. Works in all calendar viewing modes: weekly, monthly and array. Elements are selected using XPath or querySelectorAll.",
     enabled: global.prometheeColorsEnabled && true,
-    tested: MOZILLA + CHROME,
-    regex: "^https://promethee.emse.fr/(OpDotnet/commun/Login/aspxtoasp.aspx?url=/)%?Eplug/Agenda/Agenda.asp",
+    tested: FIREFOX + CHROME,
+    uregex: "^https%?://promethee.emse.fr/(OpDotnet/commun/Login/aspxtoasp.aspx?url=/)%?Eplug/Agenda/Agenda.asp",
     action: specifiedLater
   },
   "promethee.emse.fr:noweekend": {
     title: "Remove week-ends on monthly calendar",
     description: "Use XPath to select elements corresponding to Saturday or Sunday. Delete them from the view.",
     enabled: global.prometheeMonthRemoveWeekEnd && true,
-    tested: MOZILLA + CHROME,
-    regex: "^https://promethee.emse.fr/(OpDotnet/commun/Login/aspxtoasp.aspx?url=/)%?Eplug/Agenda/Agenda.asp",
+    tested: FIREFOX + CHROME,
+    uregex: "^https%?://promethee.emse.fr/(OpDotnet/commun/Login/aspxtoasp.aspx?url=/)%?Eplug/Agenda/Agenda.asp",
     action: specifiedLater
   },
   "promethee.emse.fr:expandShrink": {
     title: "Add expand and shrink buttons to the agenda frame.",
     description: "The expand is a link to the url of it's frame. The shrink button is a link to promethee.emse.fr.",
     enabled: global.prometheeColorsEnabled && true,
-    tested: MOZILLA + CHROME,
-    regex: "^https://promethee.emse.fr/(OpDotnet/commun/Login/aspxtoasp.aspx?url=/)%?Eplug/Agenda/Agenda.asp",
+    tested: FIREFOX + CHROME,
+    uregex: "^https%?://promethee.emse.fr/(OpDotnet/commun/Login/aspxtoasp.aspx?url=/)%?Eplug/Agenda/Agenda.asp",
     action: specifiedLater
   },
   "promethee.emse.fr:defaultTab:agenda": {
     title: "Agenda tab as default",
     description: "Automatically select the agenda tab on promethee.emse.fr.",
     enabled: true,
-    tested: MOZILLA + CHROME,
-    regex: "^https://promethee.emse.fr/OpDotNet/Eplug/Portail/PortailDefault.aspx?intIdGroupe=31",
-    action: (me) => document.getElementById("lnk1").click()
+    tested: FIREFOX + CHROME,
+    uregex: "^https%?://promethee.emse.fr/OpDotNet/Eplug/Portail/PortailDefault.aspx?intIdGroupe=31$",
+    action: formtools.elementClicker("#lnk1")
+  },
+  "promethee.emse.fr:nextWeek": {
+    title: "Display next week when relevent",
+    description: "During weekends, load the next week as default week.",
+    enabled: true,
+    tested: UNTESTED,
+    uregex: "^https%?://promethee.emse.fr/(OpDotnet/commun/Login/aspxtoasp.aspx?url=/)%?Eplug/Agenda/Agenda.asp?",
+    action: (me) => {
+      if (todayIsWeekend()) {
+        formtools.elementClicker("#DivVis > table > tbody > tr > td:last-child > a")();
+      }
+    }
   },
   "promethee.emse.fr:errorRedirection": {
     title: "Promethee error page redirection",
-    description: "Add redirection from error pages",
+    description: "Add redirection from a promethee error pages, to reload the page correctly",
     enabled: true,
-    tested: MOZILLA + CHROME,
-    regex: "^https://promethee.emse.fr/(commun/erreur.asp?code=[0-9]%+|OpDotNet/Commun/OPErreur.aspx?errCode=[0-9]%+)",
+    tested: FIREFOX + CHROME,
+    uregex: "^https://promethee.emse.fr/(commun/erreur.asp?code=[0-9]%+|OpDotNet/Commun/OPErreur.aspx?errCode=[0-9]%+)",
     redirectionDestination: "https://cas.emse.fr/login?service=https://promethee.emse.fr/opdotnet/",
     action: (me) => {
-      log("starting");
+      log("EMSE.user.js about to apply redirection");
       action.applyRedirection(me);
+    }
+  },
+  "promethee.emse.fr:renameTab": {
+    title: "Promethee change page title",
+    description: "Rename the page for its title to be more descriptive of it's content.",
+    enabled: true,
+    tested: FIREFOX + CHROME,
+    uregex:"^https://promethee.emse.fr",
+    uregexNamingPrefix: "^https://promethee.emse.fr",
+    uregexNamingPairs: [ /* uregex != regex */
+    ["Promethee", "/opdotnet/eplug/portail/PortailDefault.aspx?%.*intIdPageCourante=P2012"],
+    ["Agenda",  "/(OpDotnet/commun/Login/aspxtoasp.aspx?url=/)%?Eplug/Agenda/Agenda.asp"],
+    ["maFiche", "/opdotnet/eplug/portail/PortailDefault.aspx?%.*intIdPageCourante=P2016"]
+    ],
+    action: (me) => {
+      window.document.title = "Promethee";
+      for (let pair of me.uregexNamingPairs) {
+        let uregex = me.uregexNamingPrefix + pair[1];
+        if (urlmatch(uregex)) {
+          let tabName = pair[0];
+          window.top.document.title = tabName;
+        }
+      }
     }
   },
 
@@ -91,36 +139,39 @@ var features_ = _ => ({
     title: "Auto login on fw-cgcp.emse.fr",
     description: "Automatically enters credentials on fw-cgcp.emse.fr. Auto send the completed form.",
     enabled: true,
-    tested: FILL_SUBMIT * MOZILLA + BROWSERFILL_SUBMIT * MOZILLA,
-    regex: "^https://fw-cgcp.emse.fr/auth/($|login.html)",
+    tested: FILL_SUBMIT * FIREFOX + BROWSERFILL_SUBMIT * FIREFOX,
+    uregex: "^https://fw-cgcp.emse.fr/auth/($|login.html)",
     action: action.fillAndSubmitForm,
     usernameInputId: "uid",
-    passwordInputId: null,
+    passwordInputId: null
   },
   "fw-cgcp.emse.fr:auth": {
     title: "Auto login on fw-cgcp.emse.fr",
     description: "Automatically enters credentials on fw-cgcp.emse.fr. Auto send the completed form.",
     enabled: true,
-    tested: FILL_SUBMIT * MOZILLA + BROWSERFILL_SUBMIT * MOZILLA,
-    regex: "^https://fw-cgcp.emse.fr/auth/auth.html",
+    tested: FILL_SUBMIT * FIREFOX + BROWSERFILL_SUBMIT * FIREFOX,
+    uregex: "^https://fw-cgcp.emse.fr/auth/auth.html",
     action: action.fillAndSubmitForm,
     usernameInputId: "n_uid",
     passwordInputId: "pswd"
   },
-  "fw-cgcp.emse.fr:confirm": {
+  "fw-cgcp.emse.fr:confirmORredirect": {
     title: "Auto confirm on fw-cgcp.emse.fr",
-    description: "Automatically tick the checkbox to say you read the use conditions. The validate.",
+    description:`
+If it finds a checkbox, it automatically ticks it to say you read the use conditions. Then validate.
+If it doesn't find one, it redirects to {redirectionDestination}, see below.`,
+    redirectionDestination: "https://fw-cgcp.emse.fr/auth/userinfo.html",
     enabled: true,
-    tested: MOZILLA + CHROME,
-    regex: "^https://fw-cgcp.emse.fr/auth/plain.html$",
+    tested: FIREFOX + CHROME,
+    uregex: "^https://fw-cgcp.emse.fr/auth/plain.html$",
     action: specifiedLater
   },
   "fw-cgcp.emse.fr:relog": {
     title: "Auto relog on fw-cgcp.emse.fr",
     description: "Automatically goes from the 'Remaining time' page to the 'Login' page when the elapsed time exceeds `elapsedTimeThreshold`, or the remaining time goes below `remainingTimeThreshold`",
     enabled: true,
-    tested: MOZILLA * 2 + CHROME,
-    regex: "^https://fw-cgcp.emse.fr/auth/userinfo.html$",
+    tested: FIREFOX,
+    uregex: "^https://fw-cgcp.emse.fr/auth/userinfo.html$",
     redirectionDestination: "https://fw-cgcp.emse.fr/auth/auth.html",
     // ALL TIMES ARE EXPRESSED IN SECONDS (NOT MILLISECONDS).
     elapsedTimeThreshold:  60 * ( 60 * 0 + 30 ) + 0,
@@ -133,16 +184,16 @@ var features_ = _ => ({
     title: "Fold ICM category on campus.emse.fr",
     description: "Folds the ICM category by default on campus.emse.fr.",
     enabled: true,
-    tested: MOZILLA + CHROME,
-    regex: "^https%?://campus.emse.fr",
+    tested: FIREFOX + CHROME,
+    uregex: "^https%?://campus.emse.fr",
     action: specifiedLater
   },
   "campus.emse.fr:autologin": {
     title: "Loads the login page when you aren't logged.",
     description: "Automatically redirect you to the cas login page when you aren't logged on campus.emse.fr.",
     enabled: global.campusAutologin && true,
-    tested: MOZILLA + CHROME,
-    regex: "^https%?://campus.emse.fr",
+    tested: FIREFOX + CHROME,
+    uregex: "^https%?://campus.emse.fr",
     action: launcher(_ => {
       let buttonlist = document.getElementsByClassName("button_connect_emse");
       if (buttonlist.length > 0) {
@@ -155,8 +206,8 @@ var features_ = _ => ({
     title: "Sets the login button to send you to CAS directly.",
     description: "The link is extracted from the EMSE login button.",
     enabled: true,
-    tested: MOZILLA + CHROME,
-    regex: "^https%?://campus.emse.fr",
+    tested: FIREFOX + CHROME,
+    uregex: "^https%?://campus.emse.fr",
     action: launcher(_ => {
       let emseButtonlist = document.getElementsByClassName("button_connect_emse");
       let destination;
@@ -175,8 +226,8 @@ var features_ = _ => ({
     title: "Auto select the CAS login link on campus.emse.fr/login page.",
     description: "Automatically redirects you from the (deceiving) campus login page to the cas login page.",
     enabled: true,
-    tested: MOZILLA + CHROME,
-    regex: "^https%?://campus.emse.fr/login",
+    tested: FIREFOX + CHROME,
+    uregex: "^https%?://campus.emse.fr/login",
     action: formtools.elementClicker(".alert a")
   },
 
@@ -185,8 +236,8 @@ var features_ = _ => ({
     title: "Auto login on cas.emse.fr",
     description: "Automatically enters credentials on cas.emse.fr. Auto send the completed form.",
     enabled: true,
-    tested: ( FILL_SUBMIT + BROWSERFILL_SUBMIT + FILL_NOSUBMIT + NOFILL_NOSUBMIT) * MOZILLA + FILL_SUBMIT * CHROME,
-    regex: "^https%?://cas.emse.fr/login",
+    tested: (FILL_SUBMIT + BROWSERFILL_SUBMIT + FILL_NOSUBMIT + NOFILL_NOSUBMIT) * FIREFOX + FILL_SUBMIT * CHROME,
+    uregex: "^https%?://cas.emse.fr/login",
     action: action.fillAndSubmitForm,
     usernameInputId: "username",
     passwordInputId: "password"
@@ -198,11 +249,24 @@ var features_ = _ => ({
     title: "Auto login on some of the school wifi networks",
     description: "Automatically enters credentials on securelogin.arubanetworks.com. Auto send the completed form.",
     enabled: true,
-    tested: FILL_SUBMIT * MOZILLA,
-    regex: "^https%?://securelogin.arubanetworks.com/cgi-bin/login",
+    tested: FILL_SUBMIT * FIREFOX,
+    uregex: "^https%?://securelogin.arubanetworks.com/cgi-bin/login",
     action: action.fillAndSubmitForm,
     usernameInputId: "user",
     passwordInputId: "password"
+  },
+  
+  // Wifi fall page:
+  // https://www.msn.com/fr-fr/?ocid=wispr&pc=u477
+  // I want to block it. Here is a redirection from it:
+  "msn.com:fallpageRedirection:": {
+    title: "Redirect from msn.com/ wifi fallpage",
+    description: "When logging with some wifi network, you are redirected to this page for no reason once logged. This should not be so here is a redirection feature.",
+    redirectionDestination: "https://fr.wikipedia.org/wiki/Special:Random",
+    enabled: true,
+    tested: UNTESTED,
+    uregex: "https://www.msn.com/fr-fr", /* No need for a more specific match: It has already been done for script activation. See @include in the script header */
+    action: action.applyRedirection
   },
 
   // Campus GCP
@@ -210,8 +274,8 @@ var features_ = _ => ({
     title: "Auto login on CAMPUS GCP server",
     description: "Automatically enters credentials on CAMPUS GCP server. Auto send the completed form.",
     enabled: true,
-    tested: FILL_SUBMIT * MOZILLA + FILL_SUBMIT * CHROME + BROWSERFILL_SUBMIT * MOZILLA + NOFILL_NOSUBMIT * MOZILLA,
-    regex: "^https://(cloud-sgc.emse.fr|172.16.160.10):5001",
+    tested: FILL_SUBMIT * FIREFOX + FILL_SUBMIT * CHROME + BROWSERFILL_SUBMIT * FIREFOX + NOFILL_NOSUBMIT * FIREFOX,
+    uregex: "^https://(cloud-sgc.emse.fr|172.16.160.10):5001",
     action: action.fillAndSpecialSubmitForm,
     usernameInputId: "login_username",
     passwordInputId: "login_passwd",
@@ -223,8 +287,8 @@ var features_ = _ => ({
     title: "Auto login on sogo.emse.fr",
     description: "Automatically enters credentials on sogo.emse.fr. Auto send the completed form.",
     enabled: true,
-    tested: FILL_SUBMIT * MOZILLA + FILL_SUBMIT * CHROME + NOFILL_NOSUBMIT * MOZILLA, // Couldn't test BROSERFILL_SUBMIT, your help is welcomed =)
-    regex: "^https://sogo.emse.fr/(SOGo|login)",
+    tested: FILL_SUBMIT * FIREFOX + FILL_SUBMIT * CHROME + NOFILL_NOSUBMIT * FIREFOX, // Couldn't test BROSERFILL_SUBMIT, your help is welcome =)
+    uregex: "^https://sogo.emse.fr/(SOGo|login)",
     action: action.fillAndSpecialSubmitForm,
     usernameInputId: "userName",
     passwordInputId: "password",
@@ -234,15 +298,20 @@ var features_ = _ => ({
     title: "Auto login on sogo3.emse.fr",
     description: "Automatically enters credentials on sogo3.emse.fr. Auto send the completed form.",
     enabled: true,
-    tested: BROWSERFILL_SUBMIT * MOZILLA + NOFILL_NOSUBMIT * MOZILLA + FAILED(FILL_SUBMIT * MOZILLA) + FAILED(FILL_SUBMIT * CHROME),
-    regex: "^https://sogo3.emse.fr/(SOGo|login)",
+    tested: BROWSERFILL_SUBMIT * FIREFOX + NOFILL_NOSUBMIT * FIREFOX + FAILED(FILL_SUBMIT * FIREFOX) + FAILED(FILL_SUBMIT * CHROME),
+    uregex: "^https://sogo3.emse.fr/(SOGo|login)",
     action: action.fillAndSpecialSubmitForm,
     usernameInputId: "input_1",
     passwordInputId: "input_2",
     specialSubmit: formtools.elementClicker(".md-fab")
   }
 });
-
+// About URegex:
+// Url Regexp are sligthly different from regex:
+// Characters '.', '?' and '+' are escaped using brackets.
+// To use them as in normal regex, you must escape them using '%':
+// Use '%.', '%?' and '%+' and also '%%' to get a single '%'
+// See `function urlmatch (me) {` below.
 
 // testFlags [
 var UNTESTED = 0;
@@ -255,7 +324,7 @@ var BROWSERFILL_SUBMIT = 1;
 var FILL_NOSUBMIT = 1;
 var FILL_SUBMIT = 1;
 
-var MOZILLA = 1;
+var FIREFOX = 1;
 var CHROME = 1;
 
 var IN_DEVELOPMENT = -1;
@@ -266,7 +335,7 @@ function nothing (...args) {}
 
 var specifiedLater = "specifiedLater";
 var log = debug ? console.log : nothing;
-var regexlog = nothing;
+var uregexlog = nothing;
 var matchlog = log;
 var submitlog = nothing;
 
@@ -279,19 +348,23 @@ function main () {
   laterSpecifiedActions(features);
   for (let name in features) {
     let me = features[name];
-    if (me.enabled && urlmatch(me)) {
-      matchlog("MATCH:", me.title);
-      try {
-        me.action(me);
-      } catch (err) {}
+    if (urlmatch(me.uregex)) {
+      if (me.enabled) {
+        matchlog("MATCH:", me.title);
+        try {
+          me.action(me);
+        } catch (err) {}
+      } else {
+        matchlog("DISABLED", me.title);
+      }
     }
   }
 }
 
-function urlmatch (me) {
-  regexlog("RAW reg:", me.regex);
-  let regstr = me.regex.replace(/([^%])([.?+])/g, "$1[$2]").replace(/%([%.?+])/g, '$1');
-  regexlog("CPL reg:", regstr);
+function urlmatch (uregex) {
+  uregexlog("     RAW ureg: ", uregex);
+  let regstr = uregex.replace(/([^%])([.?+])/g, "$1[$2]").replace(/%([%.?+])/g, '$1');
+  uregexlog("COMPILED ureg: ", regstr);
   return location.href.match(new RegExp(regstr));
 }
 
@@ -336,6 +409,10 @@ function formatTime (sec) {
     timeString = `${seconds}s (${sec}s)`;
   }
   return timeString;
+}
+
+function todayIsWeekend () {
+  return new Date().getDay() % 6 === 0; // 0 is Sunday. 6 is Saturday. This tests for weekend.
 }
 
 function waiterForAtMostEveryThen (testFun, attempts, millisecs, callback) {
@@ -390,6 +467,7 @@ function launcher (func) {
   };
 }
 
+
 var action = {};
 
 action.applyRedirection = function (me) {
@@ -418,7 +496,9 @@ action.topifyFrame = function (me) {
   }
 };
 
-formtools = {};
+
+var formtools = {};
+
 formtools.readInputById = function (id) {
   let input = document.getElementById(id);
   return input ? input.value : null;
@@ -498,12 +578,14 @@ formtools.elementClicker = function (selector) {
 
 
 function laterSpecifiedActions (features) {
-  features["fw-cgcp.emse.fr:confirm"].action = (me) => {
+  features["fw-cgcp.emse.fr:confirmORredirect"].action = (me) => {
     var btn = document.getElementById("accept_btn");
     if (btn) {
       var tickbox = btn.form.querySelector("input[name=read]");
       setTimeout(_ => tickbox.click(), 400);
       setTimeout(_ => btn.click(), 1000);
+    } else {
+      action.applyRedirection(me)
     }
   };
 
@@ -609,6 +691,7 @@ function laterSpecifiedActions (features) {
         if (window !== window.top) {
           aIcon.textContent = "";
           aIcon.addEventListener("click", _ => action.topifyFrame(me), true);
+          aIcon.href = document.location.href;
         } else {
           aIcon.textContent = "";
           aIcon.href = "https://promethee.emse.fr/OpDotNet/Noyau/Default.aspx";
