@@ -18,7 +18,7 @@ Firefox : [extension Greasmonkey](https://addons.mozilla.org/firefox/addon/greas
 
 Consultez la [page d'accueil de Greasyfork](https://greasyfork.org/fr) pour une liste plus complète des extensions à utiliser selon le navigateur.
 
-### Step 2: Installer le script
+### Étape 2: Installer le script
 Copiez le script depuis le fichier `emse.user.js` du repository actuel [(lien: emse.user.js)](https://github.com/mathieucaroff/emse.user.js/blob/master/emse.user.js). Créez un nouveau script avec votre extension de gestion des userscripts, et collez-y le script copié. **Pour créer un script, cliquez sur le bouton de l'extension en haut à droite de votre navigateur, puis `Créer un script` ou bien `Nouveau script utilisateur`.** Suivant votre extension de gestion des userscripts, vous pouvez vous voire proposer d'installer directement le script depuis le clipboard (bouton en bas à gauche pour Greasmonkey).
 
 Évitez de cliquer sur le bouton `Raw` sur la page du fichier `emse.user.js`. Sinon, le script sera installé avec l'URL de mise à jour paramétré. Ceci signifie que les mises à jour seront automatiquement installées. Ce n'est pas désirable si vous souhaitez paramétrer votre login et mot de passe dans le script ou que vous souhaitez faire la moindre configuration. En effet, les modifications seraient écrasées à chaque mise à jour. Cependant, si vous ne souhaitez pas toucher à la configuration, il n'y a pas de problème à utiliser le bouton `Raw`.
@@ -55,10 +55,9 @@ Liste des fonctionnalités :
     3. La page de connexion de campus vous redirige automatiquement vers le CAS. Plus de risque d'essayer d'utiliser ce formulaire déroutant sur la gauche de la page.
 * Le script s'occupe aussi de la completion et de l'envoi des formulaires de connexion pour les pages suivantes [Si vous utilisez Chrome, ceci ne fonctionne que si vous avez entré votre mot de passe dans le script.] :
   * Cas
-  * School's wifi login pages (securelogin.arubanetworks.com)
-  * Campus CGCP (cloud-sgc.emse.fr:5001)
-  * Sogo
-  * Sogo3 [Ne fonctionne que lorsque le formulaire est rempli par le navigateur / ne fonctionne pas lorsqu'il est rempli par le script. Le problème est l'interface de AngularJS : elle requière que l'utilisateur ait manuellement entré des données avant de permettre la validation. Toute aide est bienvenue.]
+  * La page de connexion au wifi de l'école (securelogin.arubanetworks.com)
+  * Campus CGCP (cloud-sgc.emse.fr:5001 ou 172.16.160.10:5001)
+  * Sogo et Sogo3
 
 Vous êtes aussi encouragés à éditer le code pour qu'il réponde a vos besoins.
 
