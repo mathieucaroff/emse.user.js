@@ -24,7 +24,7 @@
  * Features are executed on the following subdomains:
  *     {fw-cgcp, cas, campus, campus-cgcp, sogo}.emse.fr
  *
- * The prafixes {172[.]16[.]160[.]10:5001, securelogin[.]arubanetworks[.]com and www[.]msn[.]com/fr-fr/}
+ * The prefixes {172.16.160.10:5001, securelogin.arubanetworks.com and www.msn.com/fr-fr/}
  * are respectively: {Campus CGCP server ip, wifi login page (for auto-completion) and wifi landing page (for redirection)}.
  *
  * The only way to be sure that a script isn't malicious is to read the whole code and make sure it contains nothing malicious.
@@ -317,17 +317,6 @@ If it doesn't find one, it redirects to {redirectionDestination}, see below.`,
     usernameInputId: "userName",
     passwordInputId: "password",
     specialSubmit: formtools.elementClicker("#submit")
-  },
-  "sogo3.emse.fr:login": {
-    title: "Auto login on sogo3.emse.fr",
-    description: "Automatically enters credentials on sogo3.emse.fr. Auto send the completed form.",
-    enabled: true,
-    tested: BROWSERFILL_SUBMIT * FIREFOX + NOFILL_NOSUBMIT * FIREFOX + FAILED(FILL_SUBMIT * FIREFOX) + FAILED(FILL_SUBMIT * CHROME),
-    uregex: "^https://sogo3.emse.fr/(SOGo|login)",
-    action: action.fillAndSpecialSubmitForm,
-    usernameInputId: "input_1",
-    passwordInputId: "input_2",
-    specialSubmit: formtools.elementClicker(".md-fab")
   }
 });
 // About URegex:
