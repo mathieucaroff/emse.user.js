@@ -9,7 +9,31 @@
 // @version     1.04
 // @grant       none
 // @run-at      document-end
+//
+// @description Student userscript for EMSE school.
+//
 // ==/UserScript==
+
+/** Description **
+ * This script, written for ISMIN student of EMSE, improves Promethee calendar, Campus, the fw-cgcp portal login
+ * and some other school pages. It skips useless pages and adds redirections. If you set your password in the script
+ * or if you use Firefox, it performs form auto-filling and auto-submitting of most login forms.
+ **/
+/** Domain
+ * It affects *.emse.fr. 
+ * Features are executed on the following subdomains:
+ *     {fw-cgcp, cas, campus, campus-cgcp, sogo}.emse.fr
+ *
+ * The prafixes {172[.]16[.]160[.]10:5001, securelogin[.]arubanetworks[.]com and www[.]msn[.]com/fr-fr/}
+ * are respectively: {Campus CGCP server ip, wifi login page (for auto-completion) and wifi landing page (for redirection)}.
+ *
+ * The only way to be sure that a script isn't malicious is to read the whole code and make sure it contains nothing malicious.
+ **/
+/** Configuration
+ * Filling the configuration section is not necessary to use ths script properly. For any missing information, the script
+ * adapts to doing what it can.
+ **/
+
 (_ => {
 
 //////////////////////////
