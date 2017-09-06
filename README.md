@@ -1,15 +1,18 @@
 # emse.user.js
 Student userscript for EMSE school.
-This script performs auto-submit, skipping useless pages and redirections on the school pages.
+
+This script improves Promethee calendar, Campus, the fw-cgcp portal login and some other school pages. It skips useless pages and adds redirections. If you set your password in the script or if you use Firefox, it performs form auto-filling and auto-submitting of most login forms. See the #feature section below.
 
 This file has a French version [here](https://github.com/mathieucaroff/emse.user.js/blob/master/README.fr.md) (it may or may not be fully up to date).
 
 # How to install
 ### Step 1: install a user script manager
-Chrome / Opera / Safari / Chromium / Vivaldi: [Tampermonkey extension](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo)
+This depends on your web browser:
+
+For Chrome / Opera / Safari / Chromium / Vivaldi: [Tampermonkey extension](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo)
 - Click the top right blue button to install the extension.
 
-Firefox: [Greasmonkey extension](https://addons.mozilla.org/firefox/addon/greasemonkey/)
+For Firefox: [Greasmonkey extension](https://addons.mozilla.org/firefox/addon/greasemonkey/)
 - On the page linked above, press the green button to install Greasmonkey. A restart of the Firefox will be required. If you click on the `restart` button, all your tabs will be reopened by Firefox.
 
 For a more comprehensive list of web browser, see this page: [Greasyfork](https://greasyfork.org/en).
@@ -18,14 +21,19 @@ For a more comprehensive list of web browser, see this page: [Greasyfork](https:
 Copy the script from the file `emse.user.js` of the current repository [(link: emse.user.js)](https://github.com/mathieucaroff/emse.user.js/blob/master/emse.user.js). Create a new script with your userscript manager extension and paste the copied script in it. This is done by clicking on the extention icon (top right of your browser window, right of the address bar), then selecting either of `Create a new script` or `New User Script...`.
 Depending on the userscript extension you use, you may be offered to import it from the clipboard.
 
-Avoid clicking the `Raw` button, otherwise the script will be installed with the update URL set. This means that updates will be automatically installed. This is not desirable if you want to set your username and password in the script or do any configuration: The modifications would be overwritten at each update. But if you don't want to do any configuration, then no problem in using the button.
+Avoid clicking the `Raw` button, otherwise the script will be installed with the update URL set. This means that the updates will be automatically installed. This is not desirable if you want to set your username and password in the script or do any configuration: The modifications would be overwritten at each update. But if you don't want to do any configuration, then no problem in using the button.
 
 Note: The script can be toggled on and off from the user script manager icon.
 
 # Features
 This script offers auto-submitting for a few logging pages. Auto-submitting consists in having the script automatically validating the login form if it is filled (filled by the browser or by the script, both work).
 
-The features are quickly described in the script as well. **Each feature can be disabled separately**. See configuration.
+Note that:
+ * The scripts begins with a few configuration lines that you may choose to fill or not. See the #configuration section below.
+ * **Each feature can be disabled separately.** See the #configuration section below.
+ * The features are quickly described in the script as well as below.
+ * You can tweak the features in the script.
+ * The script is somewhat commented/documented.
 
 Feature list:
  * Promethee:
@@ -33,14 +41,16 @@ Feature list:
    * Removes Saturdays and Sundays from the month display mode to free space on the page.
    * Adds an "Expand" button in the agenda. This button expands the agenda frame to make it occupy the whole page.
    * Automatically takes you to the "Agenda" page when the site loads.
-   * Redirects you from some error pages to the CAS login page.
+   * Automatically switch to the next week if it is weekend.
+   * Redirects you from some error pages to the CAS login page, so as to relog you to Promethee.
+   * Rename the tab to describe the content displayed.
 
  * fw-cgcp.emse.fr:
    1. Automatically complete and send the login form. This includes ticking the checkbox for the chart every 24h. [Does not work if you both did not input your password in the script and use Chrome.]
    2. [Provided (i) is used and the userinfo page is left opened] Relogs you every 30 minutes (configurable), or immediately if the remaining time is less than 14 minutes (configurable too).
 
  * Campus:
-   * Folds the ICM category when page loads.
+   * Folds the ICM category when page loads. (Somewhat obsolete, but not crompletely useless though.)
    * Automatically takes the login procedure:
      1. You are sent to the login page when arriving on campus.
      2. [Useless if you use (a)] The `login` button considers you are from EMSE and sends you directly to the emse CAS login page, rather than the campus login page.
