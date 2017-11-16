@@ -7,21 +7,25 @@ This file has a French version [here](https://github.com/mathieucaroff/emse.user
 
 # How to install
 ### Step 1: install a user script manager
-This depends on your web browser:
+I recommand the Tampermonkey extension. It is available at different locations depending on your web browser:
 
-For Chrome / Opera / Safari / Chromium / Vivaldi: [Tampermonkey extension](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo)
-- Click the top right blue button to install the extension.
+For Chrome / Opera / Safari / Chromium / Vivaldi:
 
-For Firefox: [Greasmonkey extension](https://addons.mozilla.org/firefox/addon/greasemonkey/)
-- On the page linked above, press the green button to install Greasmonkey. A restart of the Firefox will be required. If you click on the `restart` button, all your tabs will be reopened by Firefox.
+* https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo
 
-For a more comprehensive list of web browser, see this page: [Greasyfork](https://greasyfork.org/en).
+For Firefox and its siblings
+
+* https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/
+
+Click the blue button to install the extension.
+
+For a more comprehensive list of web browsers, see this page: [Greasyfork](https://greasyfork.org/en).
+
 
 ### Step 2: install the script
-Copy the script from the file `emse.user.js` of the current repository [(link: emse.user.js)](https://github.com/mathieucaroff/emse.user.js/blob/master/emse.user.js). Create a new script with your userscript manager extension and paste the copied script in it. This is done by clicking on the extention icon (top right of your browser window, right of the address bar), then selecting either of `Create a new script` or `New User Script...`.
-Depending on the userscript extension you use, you may be offered to import it from the clipboard.
+Copy the script from the file `emse.user.js` of the current repository [(link: emse.user.js)](https://github.com/mathieucaroff/emse.user.js/blob/master/emse.user.js). Create a new script and paste the copied script in it. This is done by clicking on the Tampermonkey icon (top right corner of your web browser window, right of the address bar), then selecting `Create a new script`.
 
-Avoid clicking the `Raw` button, otherwise the script will be installed with the update URL set. This means that the updates will be automatically installed. This is not desirable if you want to set your username and password in the script or do any configuration: The modifications would be overwritten at each update. But if you don't want to do any configuration, then no problem in using the button.
+Avoid clicking the `Raw` button: The default install procedure involves the script auto-update, based on the installation URL. This is not desirable if you want to set your username and password in the script or do any configuration: The modifications would be overwritten at each update. But if you don't want to do any configuration, then no problem with using the button.
 
 Note: The script can be toggled on and off from the user script manager icon.
 
@@ -30,10 +34,10 @@ This script offers auto-submitting for a few logging pages. Auto-submitting cons
 
 Note that:
  * The scripts begins with a few configuration lines that you may choose to fill or not. See the #configuration section below.
- * **Each feature can be disabled separately.** See the #configuration section below.
+ * **Each feature can be disabled separately** (from the script code). See the #configuration section below.
  * The features are quickly described in the script as well as below.
  * You can tweak the features in the script.
- * The script is somewhat commented/documented.
+ * I made some efforts to comment/document the script more than usually.
 
 Feature list:
  * Promethee:
@@ -50,11 +54,11 @@ Feature list:
    2. [Provided (i) is used and the userinfo page is left opened] Relogs you every 30 minutes (configurable), or immediately if the remaining time is less than 14 minutes (configurable too).
 
  * Campus:
-   * Folds the ICM category when page loads. (Somewhat obsolete, but not crompletely useless though.)
+   * Folds the ICM category when page loads. (Somewhat useless, but not completely)
    * Automatically takes the login procedure:
      1. You are sent to the login page when arriving on campus.
-     2. [Useless if you use (a)] The `login` button considers you are from EMSE and sends you directly to the emse CAS login page, rather than the campus login page.
-     3. [Useless if you use (b) or (a)] The campus login page redirects you to the emse CAS login page.
+     2. [Useless if you use (a)] The `login` button considers you are from EMSE and when clicked, sends you directly to the emse CAS login page, rather than the campus login page.
+     3. [Useless if you use (b) or (a)] The campus login page automatically selects the EMSE authentification, so you aren't confused by the login form to the left.
 
 * The script also performs automatic completion and submitting for the following locations [Does not work if you both did not input your password in the script and use Chrome.]:
   * Cas
@@ -87,5 +91,5 @@ You can also disable any functionality of the script through the `enable` attrib
     },
 
 # Bug and error reporting, suggestions & feature requests
-Do them directly on the Github repository's issue page.
+Do them directly on the Github repository issue page.
 
