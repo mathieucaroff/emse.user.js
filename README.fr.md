@@ -9,31 +9,36 @@ La version française n'est pas nécessairement bien maintenue à jour.
 
 # Installation
 ### Étape 1: Installer un gestionnaire de script utilisateur
-L'extension à installer est différente suivant votre navigateur web :
-Chrome / Opera / Safari / Chromium / Vivaldi : [extension Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo)
-- Depuis la page du lien ci dessus, cliquer sur le bouton bleu en haut à droit pour installer l'extension.
+Je recommande l'extension Tampermonkey.
 
-Firefox : [extension Greasmonkey](https://addons.mozilla.org/firefox/addon/greasemonkey/)
-- Sur la page du lien ci-dessus, cliquer sur le bouton vert à gauche pour installer l'extension. Un redémarage de Firefox sera nécessaire. Après le redémarrage, Firefox réouvrira les onglets qui était présent avant.
+Chrome / Opera / Safari / Chromium / Vivaldi :
+
+* https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo
+
+Firefox :
+
+* https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/
+
+Cliquez sur le bouton bleu pour installer l'extension.
 
 Consultez la [page d'accueil de Greasyfork](https://greasyfork.org/fr) pour une liste plus complète des extensions à utiliser selon le navigateur.
 
 ### Étape 2: Installer le script
-Copiez le script depuis le fichier `emse.user.js` du repository actuel [(lien: emse.user.js)](https://github.com/mathieucaroff/emse.user.js/blob/master/emse.user.js). Créez un nouveau script avec votre extension de gestion des userscripts, et collez-y le script copié. **Pour créer un script, cliquez sur le bouton de l'extension en haut à droite de votre navigateur, puis `Créer un script` ou bien `Nouveau script utilisateur`.** Suivant votre extension de gestion des userscripts, vous pouvez vous voire proposer d'installer directement le script depuis le clipboard (bouton en bas à gauche pour Greasmonkey).
+Copiez le script depuis le fichier `emse.user.js` du repository actuel [(lien: emse.user.js)](https://github.com/mathieucaroff/emse.user.js/blob/master/emse.user.js). Créez un nouveau script avec Tampermonkey et collez-y le script copié. **Pour créer un script, cliquez sur le bouton Tampermonkey en haut à droite de votre navigateur, puis `Créer un script`.**
 
-Évitez de cliquer sur le bouton `Raw` sur la page du fichier `emse.user.js`. Sinon, le script sera installé avec l'URL de mise à jour paramétré. Ceci signifie que les mises à jour seront automatiquement installées. Ce n'est pas désirable si vous souhaitez paramétrer votre login et mot de passe dans le script ou que vous souhaitez faire la moindre configuration. En effet, les modifications seraient écrasées à chaque mise à jour. Cependant, si vous ne souhaitez pas toucher à la configuration, il n'y a pas de problème à utiliser le bouton `Raw`.
+Évitez de cliquer sur le bouton `Raw` sur la page du fichier `emse.user.js` : La procédure standard d'installation comprend la mise à jour automatique du script, basée sur l'URL d'installation. Ce n'est pas désirable si vous souhaitez paramétrer votre login et mot de passe dans le script ou que vous souhaitez faire la moindre configuration. En effet, les modifications seraient écrasées à chaque mise à jour. Cependant, si vous ne souhaitez pas toucher à la configuration, il n'y a pas de problème à utiliser le bouton `Raw`.
 
-Note: Le script peut être désactivé et réactivé depuis l'icône du gestionnaire de userscript.
+Note: Le script peut être désactivé et réactivé depuis l'icône de Tampermonkey.
 
 # Fonctionnalités
 Sur un certain nombre de pages, ce script propose la validation automatique des formulaires de connexion. La validation ne s'opère que si le formulaire de connexion est rempli (qu'ils aient été complétés par le navigateur ou bien par le script).
 
 Notez que:
  * Le script commence par une courte partie de configuration que vous pouvez choisir de compléter ou de laisser tel quel. Voir la partie #configuration ci-dessous.
- * **Chaque fonctionnalité du script peut être désactivée séparément.** Voir la partie #configuration ci-après.
+ * **Chaque fonctionnalité du script peut être désactivée séparément**, dans le code du script. Voir la partie #configuration ci-après.
  * Chaque fonctionnalité est rapidement décrite dans le script, ainsi que dans la liste ci-dessous.
  * Vous pouvez modifier les fonctionnalités du script. Certaines suivent un schéma très simple.
- * Le script est plus ou moins bien commenté et documenté.
+ * J'ai fait quelques efforts pour commenter et documenter le script plus que d'accoutumé.
 
 Liste des fonctionnalités :
 * Promethee:
@@ -51,7 +56,7 @@ Liste des fonctionnalités :
   * Replie le volet ICM lorsque la page se charge, pour donner un acces directe au volet ISMIN. (Partiellement obsolète)
   * Automatise les procédure de connexion :
     1. Vous êtes envoyés sur la page de login dès votre arrivée sur campus.
-    2. [Inutile si vous utilisez (a)] Le bouton `Connexion` considère que vous êtes de l'EMSE, et vous envoye directement sur le CAS, plutôt que sur la page de connexion de campus.
+    2. [Inutile si vous utilisez (a)] Le bouton `Connexion` considère que vous êtes de l'EMSE, et lorsqu'il est cliqué, il vous envoye directement sur le CAS plutôt que sur la page de connexion de campus.
     3. La page de connexion de campus vous redirige automatiquement vers le CAS. Plus de risque d'essayer d'utiliser ce formulaire déroutant sur la gauche de la page.
 * Le script s'occupe aussi de la completion et de l'envoi des formulaires de connexion pour les pages suivantes [Si vous utilisez Chrome, ceci ne fonctionne que si vous avez entré votre mot de passe dans le script.] :
   * Cas
@@ -75,7 +80,7 @@ Vous pouvez désactiver n'importe quelle fonctionnalité du script via l'attribu
       title: "Auto login on fw-cgcp.emse.fr",
       description: "Automatically enters credentials on fw-cgcp.emse.fr. Auto send the completed form.",
       enabled: true,
-      tested: FILL_SUBMIT * MOZILLA + BROWSERFILL_SUBMIT * MOZILLA,
+      tested: FILL_SUBMIT * FIREFOX + BROWSERFILL_SUBMIT * FIREFOX,
       regex: "^https://fw-cgcp.emse.fr/auth/auth.html",
       action: action.fillAndSubmitForm,
       usernameInputId: "n_uid",
